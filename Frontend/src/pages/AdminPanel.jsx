@@ -5,6 +5,7 @@ import { ShieldCheck, BarChart2, StopCircle } from 'lucide-react';
 const AdminPanel = () => {
     const [title, setTitle] = useState('');
     const [candidatesInput, setCandidatesInput] = useState('');
+    const [durationHours, setDurationHours] = useState('24');
     const [status, setStatus] = useState('');
     const [elections, setElections] = useState([]);
 
@@ -33,7 +34,7 @@ const AdminPanel = () => {
             const candidates = candidatesInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
 
             await api.post('/api/vote/admin/create-election',
-                { title, candidates },
+                { title, candidates, durationHours: parseFloat(durationHours) || 24 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setStatus('Alegerea a fost lansată cu succes!');
@@ -105,8 +106,22 @@ const AdminPanel = () => {
                             />
                         </div>
 
-                        <button type="submit" className="btn" style={{ width: '100%', background: '#c084fc' }}>
-                            Lansează în rețea
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#e2e8f0' }}>Durata sondajului (ore):</label>
+                            <input
+                                type="number"
+                                placeholder="ex: 24"
+                                value={durationHours}
+                                onChange={(e) => setDurationHours(e.target.value)}
+                                className="input-field"
+                                style={{ width: '100%' }}
+                                min="0.1"
+                                step="0.1"
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', fontSize: '1rem' }}>
+                            Lansează Sondajul Securizat
                         </button>
                     </form>
                 </div>

@@ -46,20 +46,24 @@ router.get('/', authMiddleware, async (req, res) => {
         });
 
         // Procesăm și mapăm datele astfel încât voturile să rămână secrete cât timp curge campania!
-        const safeElections = electionsData.map(e => ({
-            id: e.id,
-            title: e.title,
-            description: e.description,
-            isActive: e.isActive,
-            isGlobal: e.familyId === null,
-            candidates: e.candidates.map(c => ({
-                id: c.id,
-                name: c.name,
-                details: c.details,
-                // Doar dacă e Inactiv se văd răspunsurile public!
-                votes: e.isActive ? null : c._count.votes 
-            }))
-        }));
+        const safeElections = electionsData.map(e => {
+            const isCurrentlyActive = e.isActive && new Date() < new Date(e.endDate);
+            return {
+                id: e.id,
+                title: e.title,
+                description: e.description,
+                endDate: e.endDate,
+                isActive: isCurrentlyActive,
+                isGlobal: e.familyId === null,
+                candidates: e.candidates.map(c => ({
+                    id: c.id,
+                    name: c.name,
+                    details: c.details,
+                    // Doar dacă e Inactiv se văd răspunsurile public!
+                    votes: isCurrentlyActive ? null : c._count.votes 
+                }))
+            };
+        });
         
         res.json(safeElections);
     } catch (e) {
@@ -80,6 +84,10 @@ router.post('/cast', authMiddleware, async (req, res) => {
         
         if (!election) return res.status(404).json({ error: "Alegerea nu există!" });
         
+        if (!election.isActive || new Date() > new Date(election.endDate)) {
+            return res.status(400).json({ error: "Timpul pentru acest sondaj a expirat sau a fost oprit!" });
+        }
+
         if (election.familyId !== null && election.familyId !== user.familyId) {
             return res.status(403).json({ error: "Nu faci parte din familia care a organizat acest sondaj!" });
         }
@@ -123,14 +131,17 @@ router.post('/admin/create-election', authMiddleware, async (req, res) => {
             targetFamilyId = family.id;
         }
 
-        const { title, description, candidates } = req.body;
+        const { title, description, candidates, durationHours } = req.body;
+        
+        const hours = parseFloat(durationHours) || 24; // Default 24h
+        const endDate = new Date(Date.now() + hours * 3600 * 1000);
         
         const newElection = await prisma.election.create({
             data: {
                 title,
                 description: description || "Alegere creată de Admin",
                 startDate: new Date(),
-                endDate: new Date(Date.now() + 864000000), // active for 10 days
+                endDate: endDate,
                 isActive: true,
                 familyId: targetFamilyId,
                 candidates: {
@@ -172,18 +183,21 @@ router.get('/admin/elections', authMiddleware, async (req, res) => {
             });
         }
 
-        const formatted = elections.map(e => ({
-            id: e.id,
-            title: e.title,
-            isActive: e.isActive,
-            isHidden: e.isHidden,
-            isGlobal: e.familyId === null,
-            totalVotes: e.candidates.reduce((acc, c) => acc + c._count.votes, 0),
-            candidatesCount: e.candidates.map(c => ({
-                name: c.name,
-                votes: c._count.votes
-            }))
-        }));
+        const formatted = elections.map(e => {
+            const isCurrentlyActive = e.isActive && new Date() < new Date(e.endDate);
+            return {
+                id: e.id,
+                title: e.title,
+                isActive: isCurrentlyActive,
+                isHidden: e.isHidden,
+                isGlobal: e.familyId === null,
+                totalVotes: e.candidates.reduce((acc, c) => acc + c._count.votes, 0),
+                candidatesCount: e.candidates.map(c => ({
+                    name: c.name,
+                    votes: c._count.votes
+                }))
+            };
+        });
 
         res.json(formatted);
     } catch (e) {

@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [selectedElection, setSelectedElection] = useState(null);
   const [voteError, setVoteError] = useState(null);
   const [voteSuccess, setVoteSuccess] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [family, setFamily] = useState(null);
   const [isCreator, setIsCreator] = useState(false);
   const [invitations, setInvitations] = useState([]);
@@ -215,20 +216,29 @@ const Dashboard = () => {
 
         {loading ? <p>Se încarcă alegerile globale...</p> : (
           <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginBottom: '3rem' }}>
-            {elections.filter(e => e.isGlobal).map((election) => (
+            {elections.filter(e => e.isGlobal).map((election) => {
+              const active = isActuallyActive(election);
+              return (
               <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                  <h3 style={{ margin: 0, color: 'white', flex: 1 }}>{election.title}</h3>
+                  <div>
+                    <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
+                    {active && election.endDate && (
+                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
+                        {renderTimeLeft(election.endDate)}
+                      </p>
+                    )}
+                  </div>
                   <span style={{
-                    background: election.status === 'Activ' || election.isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                    color: election.status === 'Activ' || election.isActive ? '#10B981' : '#EF4444',
+                    background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                    color: active ? '#10B981' : '#EF4444',
                     padding: '0.25rem 0.75rem',
                     borderRadius: '999px',
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
                     marginLeft: '1rem'
                   }}>
-                    {election.status === 'Activ' || election.isActive ? 'Activ' : 'Inactiv'}
+                    {active ? 'Activ' : 'Inactiv'}
                   </span>
                 </div>
 
@@ -236,17 +246,18 @@ const Dashboard = () => {
 
                 <button
                   className="btn"
-                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: election.isActive ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
+                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
                   onClick={() => setSelectedElection(election)}
                 >
-                  {election.isActive ? (
+                  {active ? (
                     <>Mergi la Vot <ChevronRight size={18} /></>
                   ) : (
                     <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
                   )}
                 </button>
               </div>
-            ))}
+              );
+            })}
             {elections.filter(e => e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu există sondaje globale momentan.</p>}
           </div>
         )}
@@ -256,20 +267,29 @@ const Dashboard = () => {
 
         {loading ? <p>Se încarcă...</p> : (
           <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            {elections.filter(e => !e.isGlobal).map((election) => (
+            {elections.filter(e => !e.isGlobal).map((election) => {
+              const active = isActuallyActive(election);
+              return (
               <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                  <h3 style={{ margin: 0, color: 'white', flex: 1 }}>{election.title}</h3>
+                  <div>
+                    <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
+                    {active && election.endDate && (
+                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
+                        {renderTimeLeft(election.endDate)}
+                      </p>
+                    )}
+                  </div>
                   <span style={{
-                    background: election.status === 'Activ' || election.isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                    color: election.status === 'Activ' || election.isActive ? '#10B981' : '#EF4444',
+                    background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                    color: active ? '#10B981' : '#EF4444',
                     padding: '0.25rem 0.75rem',
                     borderRadius: '999px',
                     fontSize: '0.75rem',
                     fontWeight: 'bold',
                     marginLeft: '1rem'
                   }}>
-                    {election.status === 'Activ' || election.isActive ? 'Activ' : 'Inactiv'}
+                    {active ? 'Activ' : 'Inactiv'}
                   </span>
                 </div>
 
@@ -277,17 +297,18 @@ const Dashboard = () => {
 
                 <button
                   className="btn"
-                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: election.isActive ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
+                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
                   onClick={() => setSelectedElection(election)}
                 >
-                  {election.isActive ? (
+                  {active ? (
                     <>Mergi la Vot <ChevronRight size={18} /></>
                   ) : (
                     <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
                   )}
                 </button>
               </div>
-            ))}
+              );
+            })}
             {elections.filter(e => !e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu faci parte dintr-o familie cu sondaje active.</p>}
           </div>
         )}
@@ -303,7 +324,7 @@ const Dashboard = () => {
 
             <h2 style={{ color: 'white', marginBottom: '1.5rem', paddingRight: '2rem' }}>{selectedElection.title}</h2>
 
-            {selectedElection.isActive ? (
+            {isActuallyActive(selectedElection) ? (
               // ACTIVE ELECTION: Let them vote
               voteSuccess ? (
                 <div style={{ textAlign: 'center', padding: '2rem 0' }}>
