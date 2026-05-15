@@ -19,6 +19,8 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/family', familyRoutes);
 
 const PORT = process.env.PORT || 5000;
+const cors = require('cors');
+app.use(cors()); // Permite accesul de la orice origine
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
