@@ -80,7 +80,7 @@ const AdminPanel = () => {
                     </div>
 
                     <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-                        De aici poți lansa noi sondaje pentru familia/grupul tău (sau globale dacă ești super admin).
+                        De aici poți lansa noi sondaje pentru grupul tău (sau globale dacă ești super admin).
                     </p>
 
                     {status && (
@@ -96,10 +96,10 @@ const AdminPanel = () => {
                         </div>
 
                         <div className="input-group">
-                            <label>Candidați (despărțiți prin virgulă)</label>
+                            <label>Variante (despărțite prin virgulă)</label>
                             <input
                                 type="text"
-                                placeholder="Ex: Dan, Ana, Mihai..."
+                                placeholder="Ex: Varianta 1, Varianta 2..."
                                 value={candidatesInput}
                                 onChange={e => setCandidatesInput(e.target.value)}
                                 required
@@ -168,7 +168,7 @@ const AdminPanel = () => {
                             </div>
                         </div>
                     ))}
-                    {elections.length === 0 && <p style={{ color: 'gray' }}>Nu există nicio alegere publicată.</p>}
+                    {elections.length === 0 && <p style={{ color: 'gray' }}>Nu există niciun sondaj publicat.</p>}
                 </div>
             </div>
         </div>

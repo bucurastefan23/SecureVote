@@ -105,7 +105,7 @@ const Dashboard = () => {
       setIsCreator(true);
       localStorage.setItem('isCreator', 'true');
       window.dispatchEvent(new Event('storage'));
-      setFamilyMsg("Familie creată cu succes!");
+      setFamilyMsg("Grupul a fost creat cu succes!");
     } catch (err) {
       setFamilyMsg(err.response?.data?.error || "Eroare la creare");
     }
@@ -138,10 +138,10 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await api.post('/api/family/leave', {}, { headers: { Authorization: `Bearer ${token}` } });
-      setFamilyMsg("Ai părăsit familia.");
+      setFamilyMsg("Ai părăsit grupul.");
       fetchData();
     } catch (err) {
-      setFamilyMsg(err.response?.data?.error || "Eroare la părăsirea familiei");
+      setFamilyMsg(err.response?.data?.error || "Eroare la părăsirea grupului");
     }
   };
 
@@ -172,10 +172,10 @@ const Dashboard = () => {
 
         {!family ? (
           <div style={{ marginTop: '2rem' }}>
-            <h3>Nu faci parte din nicio familie</h3>
+            <h3>Nu faci parte din niciun grup</h3>
             <p style={{ color: 'var(--text-muted)' }}>Creează una nouă pentru a invita alți membri și a lansa sondaje private.</p>
             <form onSubmit={handleCreateFamily} style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-              <input type="text" placeholder="Nume Familie (ex: Echipa IT)" required value={newFamilyName} onChange={e => setNewFamilyName(e.target.value)} style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', flex: 1 }} />
+              <input type="text" placeholder="Nume grup (ex: Echipa IT)" required value={newFamilyName} onChange={e => setNewFamilyName(e.target.value)} style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', flex: 1 }} />
               <button type="submit" className="btn">Creează</button>
             </form>
 
@@ -185,7 +185,7 @@ const Dashboard = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                   {invitations.map(inv => (
                     <div key={inv.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '6px' }}>
-                      <span>Familia: <strong>{inv.family.name}</strong></span>
+                      <span>Grupul: <strong>{inv.family.name}</strong></span>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button onClick={() => handleAcceptInvite(inv.id)} className="btn" style={{ background: '#10B981', padding: '0.4rem 1rem' }}>Acceptă</button>
                         <button onClick={() => handleRejectInvite(inv.id)} className="btn" style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', padding: '0.4rem 1rem' }}>Refuză</button>
@@ -198,7 +198,7 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <h2>Familia: {family.name}</h2>
+            <h2>Grupul: {family.name}</h2>
             <p style={{ color: 'gray', margin: 0 }}>Membri: {family.members?.length || 0}</p>
 
             <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px' }}>
@@ -223,7 +223,7 @@ const Dashboard = () => {
             ) : (
               <div style={{ marginTop: '1rem' }}>
                 <button onClick={handleLeaveFamily} className="btn" style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444' }}>
-                  Părăsește Familia
+                  Părăsește Grupul
                 </button>
               </div>
             )}
@@ -283,7 +283,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        <h1 style={{ marginBottom: '0.5rem' }}>Alegerile Familiei</h1>
+        <h1 style={{ marginBottom: '0.5rem' }}>Alegerile grupului</h1>
         <p style={{ marginBottom: '2rem' }}>Sondaje private în cadrul grupului tău.</p>
 
         {loading ? <p>Se încarcă...</p> : (
@@ -330,7 +330,7 @@ const Dashboard = () => {
                 </div>
               );
             })}
-            {elections.filter(e => !e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu faci parte dintr-o familie cu sondaje active.</p>}
+            {elections.filter(e => !e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu faci parte dintr-un grup cu sondaje active.</p>}
           </div>
         )}
       </div>
