@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
         const user = await prisma.user.findUnique({ where: { id: decoded.id } });
         if (!user) return res.status(401).json({ error: "Sesiune invalidă" });
-        
+
         req.user = user;
         next();
     } catch (e) {
@@ -62,7 +62,7 @@ Situația candidaților:\n${candidateStats}
 Sarcini:
 1) Analizează aceste date ca un expert (generează text pe scurt). Dacă au zero voturi, informează clar. Evaluează distribuția și cine a obținut majoritatea temporară sau finală.
 2) Evaluează riscul de fraudă bazat exclusiv pe distribuția statistică a voturilor (anomalii vizibile, monopolizarea voturilor, diferențe extreme). Nu menționa IP-uri, timestamp-uri sau date la care nu ai acces.
-Returnează o analiză oficială în limba română. Poți folosi bold (**) pentru a evidenția ideile principale, dar TE ROG SĂ NU folosești deloc liste cu puncte (bullet points) sau steluțe/liniuțe la începutul fiecărui rând. Scrie textul sub formă de paragrafe. Nu repeta promptul. Începe direct cu analiza.`;
+Returnează o analiză oficială în limba română folosind formatare Markdown (bold cu **, liste cu *). Nu repeta promptul meu. Începe direct cu textul analizei.`;
 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -74,7 +74,7 @@ Returnează o analiză oficială în limba română. Poți folosi bold (**) pent
 
     } catch (error) {
         console.error("Eroare Generare AI:", error);
-        
+
         let errorMessage = "Eroare la procesarea cererii AI.";
         if (error.status === 403 || error.message.includes('API key')) {
             errorMessage = "Cheia API introdusă în .env este invalidă sau a expirat. Te rog să generezi una nouă de pe Google AI Studio.";

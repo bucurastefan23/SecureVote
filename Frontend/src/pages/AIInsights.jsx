@@ -90,11 +90,12 @@ const AIInsights = () => {
                     {!loading && analysis && (
                         <div style={{ color: '#e2e8f0', lineHeight: '1.6', fontSize: '1rem' }}>
                             {/* Rendering simple markdown/HTML safely for demo purposes */}
-                            <div dangerouslySetInnerHTML={{ 
+                            <div dangerouslySetInnerHTML={{
                                 __html: analysis
                                     .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #c084fc;">$1</strong>')
                                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                    .replace(/\n/g, '<br/>') 
+                                    .replace(/^[*-]\s+(.*)$/gm, '<div style="margin-left: 1rem; margin-bottom: 0.5rem; padding-left: 0.5rem; border-left: 2px solid rgba(192, 132, 252, 0.3);">$1</div>')
+                                    .replace(/\n/g, '<br/>')
                             }} />
                         </div>
                     )}
