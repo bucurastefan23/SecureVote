@@ -17,7 +17,7 @@ const Login = () => {
 
     try {
       const endpoint = isRegistering ? '/api/auth/register' : '/api/auth/login';
-      const response = await axios.post(`http://localhost:5000${endpoint}`, { email, password });
+      const response = await api.post(endpoint, { email, password });
 
       if (!isRegistering) {
         localStorage.setItem('token', response.data.token);

@@ -14,7 +14,7 @@ const AIInsights = () => {
         const fetchElections = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:5000/api/vote/admin/elections', {
+                const res = await api.get('/api/vote/admin/elections', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setElections(res.data);
@@ -33,7 +33,7 @@ const AIInsights = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:5000/api/ai/analyze/${electionId}`, {
+            const res = await api.get(`/api/ai/analyze/${electionId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAnalysis(res.data.analysis);
