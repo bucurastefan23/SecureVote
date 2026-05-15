@@ -62,7 +62,7 @@ Situația candidaților:\n${candidateStats}
 Sarcini:
 1) Analizează aceste date ca un expert (generează text pe scurt). Dacă au zero voturi, informează clar. Evaluează distribuția și cine a obținut majoritatea temporară sau finală.
 2) Evaluează riscul de fraudă bazat exclusiv pe distribuția statistică a voturilor (anomalii vizibile, monopolizarea voturilor, diferențe extreme). Nu menționa IP-uri, timestamp-uri sau date la care nu ai acces.
-Returnează o analiză în format Markdown, gata de afișat în Frontend (cu bullet points). Nu mai repeta promptul meu. Redactează-l oficial în română. Începe cu <h3>Analiză Detaliată</h3>`;
+Returnează o analiză oficială în limba română. Poți folosi bold (**) pentru a evidenția ideile principale, dar TE ROG SĂ NU folosești deloc liste cu puncte (bullet points) sau steluțe/liniuțe la începutul fiecărui rând. Scrie textul sub formă de paragrafe. Nu repeta promptul. Începe direct cu analiza.`;
 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
