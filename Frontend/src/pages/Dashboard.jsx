@@ -24,12 +24,12 @@ const Dashboard = () => {
   const renderTimeLeft = (endDateStr) => {
     if (!endDateStr) return null;
     const diff = new Date(endDateStr).getTime() - currentTime.getTime();
-    if (diff <= 0) return <span style={{color: '#ef4444'}}>Expirat</span>;
-    
+    if (diff <= 0) return <span style={{ color: '#ef4444' }}>Expirat</span>;
+
     const h = Math.floor(diff / (1000 * 60 * 60));
     const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((diff % (1000 * 60)) / 1000);
-    
+
     return `⏳ ${h}h ${m}m ${s}s`;
   };
 
@@ -240,43 +240,43 @@ const Dashboard = () => {
             {elections.filter(e => e.isGlobal).map((election) => {
               const active = isActuallyActive(election);
               return (
-              <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                  <div>
-                    <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
-                    {active && election.endDate && (
-                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
-                        {renderTimeLeft(election.endDate)}
-                      </p>
-                    )}
+                <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                    <div>
+                      <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
+                      {active && election.endDate && (
+                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
+                          {renderTimeLeft(election.endDate)}
+                        </p>
+                      )}
+                    </div>
+                    <span style={{
+                      background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                      color: active ? '#10B981' : '#EF4444',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 'bold',
+                      marginLeft: '1rem'
+                    }}>
+                      {active ? 'Activ' : 'Inactiv'}
+                    </span>
                   </div>
-                  <span style={{
-                    background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                    color: active ? '#10B981' : '#EF4444',
-                    padding: '0.25rem 0.75rem',
-                    borderRadius: '999px',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold',
-                    marginLeft: '1rem'
-                  }}>
-                    {active ? 'Activ' : 'Inactiv'}
-                  </span>
+
+                  <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem' }}>Variante posibile: {election.candidates?.length || 0}</p>
+
+                  <button
+                    className="btn"
+                    style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
+                    onClick={() => setSelectedElection(election)}
+                  >
+                    {active ? (
+                      <>Voteaza <ChevronRight size={18} /></>
+                    ) : (
+                      <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
+                    )}
+                  </button>
                 </div>
-
-                <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem' }}>Candidați Înscriși: {election.candidates?.length || 0}</p>
-
-                <button
-                  className="btn"
-                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
-                  onClick={() => setSelectedElection(election)}
-                >
-                  {active ? (
-                    <>Mergi la Vot <ChevronRight size={18} /></>
-                  ) : (
-                    <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
-                  )}
-                </button>
-              </div>
               );
             })}
             {elections.filter(e => e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu există sondaje globale momentan.</p>}
@@ -291,43 +291,43 @@ const Dashboard = () => {
             {elections.filter(e => !e.isGlobal).map((election) => {
               const active = isActuallyActive(election);
               return (
-              <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                  <div>
-                    <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
-                    {active && election.endDate && (
-                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
-                        {renderTimeLeft(election.endDate)}
-                      </p>
-                    )}
+                <div key={election.id} className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                    <div>
+                      <h3 style={{ margin: 0, color: 'white' }}>{election.title}</h3>
+                      {active && election.endDate && (
+                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#fbbf24', fontWeight: 'bold' }}>
+                          {renderTimeLeft(election.endDate)}
+                        </p>
+                      )}
+                    </div>
+                    <span style={{
+                      background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                      color: active ? '#10B981' : '#EF4444',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 'bold',
+                      marginLeft: '1rem'
+                    }}>
+                      {active ? 'Activ' : 'Inactiv'}
+                    </span>
                   </div>
-                  <span style={{
-                    background: active ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                    color: active ? '#10B981' : '#EF4444',
-                    padding: '0.25rem 0.75rem',
-                    borderRadius: '999px',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold',
-                    marginLeft: '1rem'
-                  }}>
-                    {active ? 'Activ' : 'Inactiv'}
-                  </span>
+
+                  <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem' }}>Variante: {election.candidates?.length || 0}</p>
+
+                  <button
+                    className="btn"
+                    style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
+                    onClick={() => setSelectedElection(election)}
+                  >
+                    {active ? (
+                      <>Voteaza <ChevronRight size={18} /></>
+                    ) : (
+                      <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
+                    )}
+                  </button>
                 </div>
-
-                <p style={{ fontSize: '0.875rem', marginBottom: '1.5rem' }}>Candidați Înscriși: {election.candidates?.length || 0}</p>
-
-                <button
-                  className="btn"
-                  style={{ width: '100%', opacity: 1, cursor: 'pointer', background: active ? 'var(--primary)' : 'rgba(255,255,255,0.1)' }}
-                  onClick={() => setSelectedElection(election)}
-                >
-                  {active ? (
-                    <>Mergi la Vot <ChevronRight size={18} /></>
-                  ) : (
-                    <>Vezi Rezultatele <BarChart2 size={18} style={{ marginLeft: '4px' }} /></>
-                  )}
-                </button>
-              </div>
               );
             })}
             {elections.filter(e => !e.isGlobal).length === 0 && <p style={{ color: 'gray' }}>Nu faci parte dintr-o familie cu sondaje active.</p>}
@@ -355,7 +355,7 @@ const Dashboard = () => {
               ) : (
                 <>
                   {voteError && <p style={{ color: '#ef4444', marginBottom: '1rem' }}>{voteError}</p>}
-                  <p style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>Alege candidatul dorit. Acest proces este complet anonim.</p>
+                  <p style={{ marginBottom: '1rem', color: 'var(--text-muted)' }}>Alege varianta dorita. Acest proces este complet anonim.</p>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {selectedElection.candidates?.map(c => (
@@ -365,7 +365,7 @@ const Dashboard = () => {
                       </div>
                     ))}
                     {(!selectedElection.candidates || selectedElection.candidates.length === 0) && (
-                      <p style={{ color: 'gray', fontStyle: 'italic' }}>Nu există candidați înregistrați momentan.</p>
+                      <p style={{ color: 'gray', fontStyle: 'italic' }}>Nu există variante momentan.</p>
                     )}
                   </div>
                 </>
