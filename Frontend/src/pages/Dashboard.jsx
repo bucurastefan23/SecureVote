@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, CheckCircle, X, BarChart2 } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const [elections, setElections] = useState([]);
