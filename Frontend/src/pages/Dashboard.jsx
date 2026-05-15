@@ -16,6 +16,27 @@ const Dashboard = () => {
   const [inviteEmail, setInviteEmail] = useState('');
   const [familyMsg, setFamilyMsg] = useState('');
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const renderTimeLeft = (endDateStr) => {
+    if (!endDateStr) return null;
+    const diff = new Date(endDateStr).getTime() - currentTime.getTime();
+    if (diff <= 0) return <span style={{color: '#ef4444'}}>Expirat</span>;
+    
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    return `⏳ ${h}h ${m}m ${s}s`;
+  };
+
+  const isActuallyActive = (e) => {
+    return e.isActive && (!e.endDate || new Date(e.endDate) > currentTime);
+  };
+
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
