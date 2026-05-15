@@ -19,7 +19,7 @@ const AIInsights = () => {
                 });
                 setElections(res.data);
             } catch (e) {
-                console.error("Nu s-au putut încărca alegerile");
+                console.error("Nu s-au putut încărca alegerile", e);
             }
         };
         fetchElections();
