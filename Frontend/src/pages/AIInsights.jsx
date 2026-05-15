@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Cpu, ChevronRight, Activity } from 'lucide-react';
 
 
@@ -19,7 +19,7 @@ const AIInsights = () => {
                 });
                 setElections(res.data);
             } catch (e) {
-                console.error("Nu s-au putut încărca alegerile", e);
+                console.error("Nu s-au putut încărca alegerile");
             }
         };
         fetchElections();
@@ -65,9 +65,6 @@ const AIInsights = () => {
                         <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.85rem' }}>Status: {e.isActive ? 'Active' : 'Închise'} | Total Voturi: {e.totalVotes}</p>
                     </div>
                 ))}
-                {elections.length === 0 && !loading && !error && (
-                    <p style={{ color: 'var(--text-muted)' }}>Nu ai niciun sondaj activ sau închis pe acest cont în baza de date (sau pe acest server).</p>
-                )}
             </div>
 
             {/* Display Analysis */}
