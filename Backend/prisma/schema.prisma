@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String                  @id @default(uuid())
+  email          String                  @unique
+  passwordHash   String
+  role           Role                    @default(VOTER)
+  familyId       String?
+  family         Family?                 @relation("FamilyMembers", fields: [familyId], references: [id])
+  createdFamily  Family?                 @relation("FamilyCreator")
+  createdAt           DateTime                @default(now())
+  participations      ElectionParticipation[]
+  invitationsReceived FamilyInvitation[]      @relation("UserInvitations")
+}
+
+enum Role {
+  ADMIN
+  VOTER
+}
+
+model Election {
+  id             String                  @id @default(uuid())
+  title          String
+  description    String
+  startDate      DateTime
+  endDate        DateTime
+  isActive       Boolean                 @default(false)
+  isHidden       Boolean                 @default(false)
+  familyId       String?
+  family         Family?                 @relation(fields: [familyId], references: [id])
+  createdAt      DateTime                @default(now())
+  candidates     Candidate[]
+  participations ElectionParticipation[]
+  votes          Vote[]
+}
+
+model Family {
+  id        String     @id @default(uuid())
+  name      String
+  creatorId String     @unique
+  creator   User       @relation("FamilyCreator", fields: [creatorId], references: [id])
+  members         User[]             @relation("FamilyMembers")
+  elections       Election[]
+  invitationsSent FamilyInvitation[] @relation("FamilyInvitations")
+  createdAt       DateTime           @default(now())
+}
+
+model Candidate {
+  id          String   @id @default(uuid())
+  electionId  String
+  name        String
+  details     String
+  photoUrl    String?
+  election    Election @relation(fields: [electionId], references: [id])
+  votes       Vote[]
+}
+
+model ElectionParticipation {
+  id         String   @id @default(uuid())
+  userId     String
+  electionId String
+  votedAt    DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+  election   Election @relation(fields: [electionId], references: [id])
+
+  @@unique([userId, electionId])
+}
+
+model Vote {
+  id          String   @id @default(uuid())
+  electionId  String
+  candidateId String
+  timestamp   DateTime @default(now())
+  // No relation to User here to ensure anonymity!
+
+  election    Election  @relation(fields: [electionId], references: [id])
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+}
+
+model FamilyInvitation {
+  id        String   @id @default(uuid())
+  familyId  String
+  userId    String
+  status    String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt DateTime @default(now())
+
+  family    Family   @relation("FamilyInvitations", fields: [familyId], references: [id])
+  user      User     @relation("UserInvitations", fields: [userId], references: [id])
+
+  @@unique([familyId, userId]) // Prevent multiple active invites for the same family to the same user
+}
