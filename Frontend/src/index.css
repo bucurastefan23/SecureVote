@@ -134,3 +134,40 @@ p {
 .animate-fade-in {
   animation: fadeIn 0.5s ease forwards;
 }
+
+/* Responsive Overrides */
+html, body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  nav.glass-panel {
+    flex-direction: column !important;
+    gap: 1rem;
+    padding: 1rem !important;
+  }
+  
+  nav > div {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .glass-panel {
+    padding: 1.25rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Fix inline grids that use 300px minmax */
+  div[style*="minmax(300px"] {
+    grid-template-columns: 1fr !important;
+  }
+}

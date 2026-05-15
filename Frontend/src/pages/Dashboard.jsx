@@ -236,7 +236,7 @@ const Dashboard = () => {
         <p style={{ marginBottom: '2rem' }}>Sondaje și alegeri publice (Platformă Securizată).</p>
 
         {loading ? <p>Se încarcă alegerile globale...</p> : (
-          <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginBottom: '3rem' }}>
+          <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', marginBottom: '3rem' }}>
             {elections.filter(e => e.isGlobal).map((election) => {
               const active = isActuallyActive(election);
               return (
@@ -287,7 +287,7 @@ const Dashboard = () => {
         <p style={{ marginBottom: '2rem' }}>Sondaje private în cadrul grupului tău.</p>
 
         {loading ? <p>Se încarcă...</p> : (
-          <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+          <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
             {elections.filter(e => !e.isGlobal).map((election) => {
               const active = isActuallyActive(election);
               return (
