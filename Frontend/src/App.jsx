@@ -10,7 +10,7 @@ const App = () => {
   return (
     <>
       <Navbar />
-      <div className="container animate-fade-in">
+      <div className="container">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
